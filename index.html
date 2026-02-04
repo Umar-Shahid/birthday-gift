@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>A Gift For You 🎁</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- WhatsApp Preview -->
+<meta property="og:title" content="A Gift For You 🎁" />
+<meta property="og:description" content="Tap the gift to open your birthday surprise 🎂" />
+<meta property="og:image" content="https://Umar-Shahid.github.io/birthday-gift/gift.svg" />
+<meta property="og:url" content="https://Umar-Shahid.github.io/birthday-gift/" />
+<meta property="og:type" content="website" />
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: white;
+  text-align: center;
+}
+
+.hidden { display: none; }
+
+.gift {
+  font-size: 110px;
+  cursor: pointer;
+  animation: bounce 1.5s infinite;
+}
+
+@keyframes bounce {
+  50% { transform: translateY(-20px); }
+}
+
+.title {
+  font-size: 2.6rem;
+  animation: fadeIn 1.5s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.rain {
+  position: absolute;
+  top: -40px;
+  font-size: 1.4rem;
+  animation: fall 5s linear forwards;
+}
+
+@keyframes fall {
+  to { transform: translateY(110vh); opacity: 0; }
+}
+
+.cake {
+  font-size: 90px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="start">
+  <div class="gift" onclick="startParty()">🎁</div>
+  <p>Tap the gift</p>
+</div>
+
+<div id="party" class="hidden">
+  <div class="title" id="title"></div>
+  <div class="cake" onclick="blowCandles()">🎂</div>
+  <p>(Tap the cake to blow candles)</p>
+</div>
+
+<audio id="music" src="music.mp3" preload="auto"></audio>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const name = params.get("name") || "Friend";
+
+document.getElementById("title").innerText =
+  `🎉 Happy Birthday, ${name}! 🎂`;
+
+function startParty() {
+  document.getElementById("start").classList.add("hidden");
+  document.getElementById("party").classList.remove("hidden");
+
+  document.getElementById("music").play().catch(()=>{});
+
+  confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 } });
+
+  setInterval(() => {
+    confetti({
+      particleCount: 6,
+      spread: 360,
+      origin: { x: Math.random(), y: 0 }
+    });
+  }, 300);
+
+  const wishes = [
+    "🎉 Happy Birthday!",
+    "🎈 Lots of Love!",
+    "💖 Best Wishes!",
+    "🌟 Shine Bright!",
+    "🥳 Celebrate Big!"
+  ];
+
+  setInterval(() => {
+    const d = document.createElement("div");
+    d.className = "rain";
+    d.style.left = Math.random() * 100 + "vw";
+    d.textContent = wishes[Math.floor(Math.random()*wishes.length)];
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 5000);
+  }, 400);
+}
+
+function blowCandles() {
+  document.querySelector(".cake").innerText = "🍰";
+  confetti({ particleCount: 300, spread: 180 });
+}
+</script>
+
+</body>
+</html>
